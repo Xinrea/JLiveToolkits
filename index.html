@@ -1,0 +1,130 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>JLive Toolkits</title>
+	<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+  <style type="text/css">
+body {
+  color: black;
+  font-family: 微软雅黑;
+  font-size: 80px;
+}
+a {
+  text-decoration:none;
+  color: black;
+  font-size: 60px;
+  margin: 20px 20px 20px 20px;
+  font-weight: bold;
+}
+
+span {
+  position: relative;
+  z-index: 1;
+}
+
+span::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: -0.25em;
+  right: -0.25em;
+  background-color: hsla(341, 97%, 59%, 0.75);
+  transform-origin: center right;
+  transform: scaleX(0);
+  transition: transform 0.2s ease-in-out;
+}
+
+span:hover::before {
+  transform: scaleX(1);
+  transform-origin: center left;
+}
+  </style>
+</head>
+<body>
+  <div style="text-align:center;">
+    <h3>Joi's Live Toolbox</h3>
+    <a href="/clock/?format=HH:mm:ss"><span>时间</span></a>
+    <a href="/heat/?mid=21484828"><span>人气值</span></a>
+    <a href="/vote/?mid=21484828&option=50cm,51cm,53cm,60cm&time=30"><span>投票</span></a>
+  </div>
+	<div class="css-generate" style="text-align:center; margin-top: 100px;">
+		<div class="gFrame" style="height:300px;">
+			<p class="toolname" style="font-size:20px;">投票样式生成器</p>
+			<div style="display: inline-block">
+			<div style="float:left;"><iframe id="voteFrame" frameborder="0" src="/vote/?mid=21484828&option=测试选项1,测试选项2,测试选项3&time=500&test" style="height:100%"></iframe></div>
+			<div style="float:left;margin-left:10px;"><textarea style="height:100%;width: 300px;" class="cssTextarea" id="voteCSS"></textarea></div>
+			<div class="options" style="font-size:10px;float:left;margin-left:10px;text-align:left;">
+				<div><label for="text-size">文字大小: </label><input type="number" id="text-size" value="16"></div>
+				<div><label for="text-font">文字字体: </label><input type="text" id="text-font" value="微软雅黑"></div>
+				<div><label for="text-color">文字颜色: </label><input type="color" id="text-color"></div>
+				<div><label for="text-outcolor">描边颜色: </label><input type="color" id="text-outcolor" value="#ffffff"></div>
+				<div><label for="option-bgcolor">选项背景颜色: </label><input type="color" id="option-bgcolor" value="#ffffff"></div>
+				<div><label for="option-ftcolor">选项进度颜色: </label><input type="color" id="option-ftcolor" value="#fc3171"></div>
+				<div><label for="option-radius">选项圆角: </label><input type="number" id="option-radius" value="2"></div>
+			</div>
+			<script>
+var template = ['#output {',
+'font-family:{{text-font}};',
+'color: {{text-color}};',
+'font-size: {{text-size}}px;',
+'}',
+'.optionBar {',
+'background-color: {{option-ftcolor}};',
+'border-radius: {{option-radius}}px;',
+'}',
+'.option {',
+'background-color: {{option-bgcolor}};',
+'border-radius: {{option-radius}}px;',
+'}',
+'{{text-outlines}}',
+].join('\n');
+
+var mustacheRegex = /{{(.*?)}}/g;
+
+var getValue = function(id) {
+      var input =  document.querySelector('#' + id);
+      if (input) {
+        return input.value
+      }
+      return id;
+    }
+    var isChecked = function(id) {
+      return document.querySelector('#' + id).checked;
+}
+
+var callbacks = {
+	'text-outlines': function(id) {
+		var size = 1;
+		return ['.stroke {',
+					'text-shadow:'+getValue('text-outcolor')+' '+size+'px 0 0,'+getValue('text-outcolor')+' 0 '+size+'px 0,'+getValue('text-outcolor')+' -'+size+'px 0 0,'+getValue('text-outcolor')+' 0 -'+size+'px 0;}'].join('\n');
+	}
+};
+    var update = function(event) {
+      var style = template.replace(mustacheRegex, function(match) {
+        var id = match.substring(2, match.length - 2);
+        if (callbacks[id]) {
+          return callbacks[id](id);
+        }
+        return getValue(id);
+      });
+      $('#voteCSS').val(style);
+	  updateStyle();
+}
+var inputs = document.querySelectorAll('input');
+inputs.forEach(function(input) {
+	input.addEventListener('change', update);
+	input.addEventListener('input', update);
+});
+function updateStyle() {
+	$('#voteFrame').contents().find('body').find('style').html($('#voteCSS').val());
+};
+$('#voteCSS').keyup(updateStyle);
+update()
+			</script>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

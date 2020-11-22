@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>RoomHeat</title>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pako@2.0.1/dist/pako.min.js"></script>
+    <script src="./countUp.min.js" type="module"></script>
+    <script src="./fg.js" type="module"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="fg.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row" style="margin: 20px 0px 20px 0px;">
+            <div class="col-sm-2">
+                <div class="card score-board">
+                    <div class="card-body">
+                        <h5 class="card-title">计分板</h5>
+                        <p class="card-text">
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 gameCol">
+                <div class="card stage">
+                    <div class="card-body">
+                        <p class="card-text">Now：第<span class="round">1</span>轮<span id="stage">统计阶段</span><span
+                                id="countDown">30</span>s</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card info">
+                    <div class="card-body">
+                        <h5 class="card-title">说明</h5>
+                        <p class="card-text">
+                            <li>游戏每30秒一轮，其中包含25秒统计时间与5秒结算时间</li>
+                            <li>每轮开始时，bot会随机选择 剪刀/石头/布</li>
+                            <li>统计时间内，发送弹幕 #剪刀/#石头/#布 参与游戏</li>
+                            <li>统计结束时，会公开bot的选项，并开始结算分数</li>
+                            <li>玩家初始分数100pt，参与一轮游戏需花费5pt</li>
+                            <li>获胜玩家返还参与点数5pt，并均分失败玩家的参与点数（均分后不足1pt按1pt计算）</li>
+                            <li>失败玩家不获得点数</li>
+                            <li>现游戏为测试版，分数在直播结束后不会保存</li>
+                        </p>
+                    </div>
+                </div>
+                <div class="card message" style="margin-top: 20px;" hidden="hidden">
+                    <div class="card-body">
+                        <h5 class="card-title">弹幕</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of
+                            the card's
+                            content.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
