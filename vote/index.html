@@ -3,15 +3,12 @@
 
 <head>
     <meta charset="utf-8">
-	<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'>
     <title>RoomVote</title>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/pako@2.0.1/dist/pako.min.js"></script>
     <script src="./vote.js" type="module"></script>
     <style type="text/css">
-		body {
-			font-family: "Microsoft YaHei", "黑体", "宋体", sans-serif;
-		}
         .option {
             margin: 10px 10px 10px 10px;
             padding: 10px 10px 10px 10px;
@@ -47,19 +44,19 @@
         .optionTag {
             margin-right: 20px;
         }
-	
-		.stroke {
-			text-shadow: #fff 1px 0 0, #fff 0 1px 0, #fff -1px 0 0, #fff 0 -1px 0;
-		}
+
+        .stroke {
+            text-shadow: #fff 1px 0 0, #fff 0 1px 0, #fff -1px 0 0, #fff 0 -1px 0;
+        }
     </style>
 </head>
 
 <body>
-	<style></style>
-	<span class="setting" hidden></span>
+    <style></style>
+    <span class="setting" hidden></span>
     <div id="output">
-    	<span class="stroke" id="timeTag" style="margin: 10px; font-weight: bold;">剩余时间：<span id="time"></span></span>
-	</div>
+        <span class="stroke" id="timeTag" style="margin: 10px; font-weight: bold;">剩余时间：<span id="time"></span></span>
+    </div>
     <span id="status" style="margin:10px; float: right;">🔴</span>
 </body>
 
