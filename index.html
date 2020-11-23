@@ -24,8 +24,9 @@
         </div>
         <hr class="uk-divider-icon">
         <!-- 时间 -->
-        <div class="panel" style="margin: 0px auto; width: 800px; height: 600px" id="time">
-            <h3 class="uk-card-title"><span uk-icon="clock"></span> 时间</h3>
+        <div class="panel" style="margin: 0px auto; width: 800px; height: 600px;" id="time">
+            <h3 class="uk-card-title" style="font-size: 40px; text-align: center;"><span
+                    uk-icon="icon: clock; ratio: 3"></span> 时间</h3>
             <div class=" time-preview">
                 <iframe src="clock/index.html?format=HH:mm:ss" height="500px" width="500px"
                     style="border: 1px dotted gray; float: left;"></iframe>
@@ -62,7 +63,8 @@
         <hr class="uk-divider-icon">
         <!-- 人气值 -->
         <div class="panel" style="margin: 0px auto; width: 800px; height: 600px;" id="heat">
-            <h3 class="uk-card-title"><span uk-icon="heart"></span> 人气值</h3>
+            <h3 class="uk-card-title" style="font-size: 40px; text-align: center;"><span
+                    uk-icon="icon: heart; ratio: 3"></span> 人气值</h3>
             <div class=" time-preview">
                 <iframe src="heat/index.html?mid=21484828" height="500px" width="500px"
                     style="border: 1px dotted gray; float: left;"></iframe>
@@ -94,7 +96,8 @@
         <hr class="uk-divider-icon">
         <!-- 投票 -->
         <div class="panel" style="margin: 0px auto; width: 800px; height: 800px;" id="vote">
-            <h3 class="uk-card-title"><span uk-icon="comments"></span> 投票</h3>
+            <h3 class="uk-card-title" style="font-size: 40px; text-align: center;"><span
+                    uk-icon="icon: comments; ratio: 3"></span> 投票</h3>
             <div class=" time-preview">
                 <iframe src="vote/index.html?mid=21484828&option=测试选项1,测试选项2,测试选项3&time=300&test" height="750px"
                     width="500px" style="border: 1px dotted gray; float: left;"></iframe>
@@ -143,11 +146,60 @@
         </div>
         <div style="margin: 50px auto; width: 800px;">
             <article class="uk-article">
-                <h1 class="uk-article-title">关于投票的说明</h1>
+                <h1 class="uk-article-title" style="font-size: 30px;">有关投票的说明</h1>
                 <p class="uk-text-lead" uk-text>
                     <li>选项间请使用英文逗号"<code>,</code>"隔开，受英文字母数量限制，请不要超过26个；</li>
                     <li>OBS浏览器源内刷新网页缓存，即可重新开始计时；计时结束自动停止计票；</li>
                     <li>一人只能投一票，投票需要发送的弹幕中包含大写英文字母<code>A,B,C,D</code>等选项。</li>
+                </p>
+            </article>
+        </div>
+        <hr class="uk-divider-icon">
+        <!-- 礼物机 -->
+        <div class="panel" style="margin: 0px auto; width: 1300px; height: 700px;" id="gift">
+            <h3 class="uk-card-title" style="font-size: 40px; text-align: center;"><span
+                    uk-icon="icon: credit-card; ratio: 3"></span> 礼物机
+            </h3>
+            <div class=" time-preview">
+                <iframe src="gift/index.html?mid=21484828&time=3&template=感谢{{usr}}{{action}}的{{num}}个{{gift}}&test"
+                    height="600px" width="800px" style="border: 1px dotted gray; float: left;"></iframe>
+            </div>
+            <div class="options uk-margin-left" style="float: left;">
+                <div><label for="room">房间号：</label><input type="text" class="room" value="21484828"></div>
+                <div><label for="template">文字模板：</label><input type="text" class="template"
+                        value="感谢{{usr}}{{action}}的{{num}}个{{gift}}" style="width: 300px;"></div>
+                <div><label for="time">动画时长</label><input type="number" class="time" value="3"></div>
+                <hr class="uk-divider-small">
+                <div><label for="text-size">文字大小：</label><input type="number" class="text-size" value="16"></div>
+                <div><label for="text-font">文字字体：</label><input type="text" class="text-font" value="微软雅黑"></div>
+                <div><label for="text-color">文字颜色：</label><input type="color" class="text-color"></div>
+                <div><label for="text-keycolor">关键字颜色：</label><input type="color" class="text-keycolor"></div>
+                <hr class="uk-divider-small">
+                <div><label for="text-stroke">启用描边：</label><input type="checkbox" class="text-stroke"></div>
+                <div><label for="stroke-size">描边大小：</label><input type="number" class="stroke-size" value="1"></div>
+                <div><label for="stroke-color">描边颜色：</label><input type="color" class="stroke-color" value="#ffffff">
+                </div>
+                <hr class="uk-divider-small">
+                <div><label for="text-shadow">启用阴影：</label><input type="checkbox" class="text-shadow"></div>
+                <div><label for="shadow-x">阴影偏移x：</label><input type="number" class="shadow-x" value="1"></div>
+                <div><label for="shadow-y">阴影偏移y：</label><input type="number" class="shadow-y" value="1"></div>
+                <div><label for="shadow-blur">阴影模糊：</label><input type="number" class="shadow-blur" value="0"></div>
+                <div><label for="shadow-color">阴影颜色：</label><input type="color" class="shadow-color" value="#ffffff">
+                    <div class="uk-margin-top">
+                        <button class="uk-button uk-button-default uk-button-small url-btn">复制URL</button>
+                        <button class="uk-button uk-button-default uk-button-small css-btn">复制CSS</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="margin: 50px auto; width: 800px;">
+            <article class="uk-article">
+                <h1 class="uk-article-title" style="font-size: 30px;">有关礼物机的说明</h1>
+                <p class="uk-text-lead" uk-text>
+                    <li>模板中<code>{{usr}}</code><code>{{action}}</code><code>{{num}}</code><code>{{gift}}</code>会被替换成对应的文字，详情请参考示例理解；
+                    </li>
+                    <li>由于网页无法直接使用本地文件，必须经过用户操作，因此在OBS中添加浏览器源后，请右键该源，选择倒数第三项<code>互动</code>，然后便可像在普通浏览器中一样，点击设置图片和音频了；
+                    </li>
                     如果此页面的工具有帮助到你，不妨关注一下作者<a href="https://space.bilibili.com/475210">@Xinrea</a>以及他的单推对象<a
                         href="https://space.bilibili.com/61639371">@轴伊Joi_Channel</a>，十分感谢。
                 </p>

@@ -3,12 +3,14 @@ var template = {
         'font-size: {{text-size}}px;',
         'font-family:"{{text-font}}";',
         'color: {{text-color}};{{text-shadow-stroke}}',
-        '}'].join('\n'),
+        '}'
+    ].join('\n'),
     'heat': ['#output {',
         'font-size: {{text-size}}px;',
         'font-family:"{{text-font}}";',
         'color: {{text-color}};{{text-shadow-stroke}}',
-        '}'].join('\n'),
+        '}'
+    ].join('\n'),
     'vote': ['#output {',
         'font-family:"{{text-font}}";',
         'color: {{text-color}};',
@@ -25,6 +27,15 @@ var template = {
         '}',
         '.stroke {',
         '{{text-shadow-stroke}}',
+        '}',
+    ].join('\n'),
+    'gift': ['#output {',
+        'font-size: {{text-size}}px;',
+        'font-family:"{{text-font}}";',
+        'color: {{text-color}};{{text-shadow-stroke}}',
+        '}',
+        '.key {',
+        'color: {{text-keycolor}};',
         '}'
     ].join('\n'),
 };
@@ -188,7 +199,45 @@ var callbacks = {
             }
             return tmp;
         }
-    }
+    },
+    'gift': {
+        'text-font': function (id) {
+            return ch2Unicdoe(getValue('gift', id));
+        },
+        'text-shadow-stroke': function (id) {
+            if (!isChecked('gift', 'text-stroke') && !isChecked('gift', 'text-shadow')) return '';
+            var tmp = '\ntext-shadow:\n';
+            if (isChecked('gift', 'text-stroke')) {
+                var size = getValue('gift', 'stroke-size');
+                var color = getValue('gift', 'stroke-color');
+                for (var i = -1; i < 2; i++) {
+                    for (var j = -1; j < 2; j++) {
+                        tmp += i * size + 'px ' + j * size + 'px ' + '0 ' + color;
+                        if (i === 1 && j === 1) {
+                            if (isChecked('gift', 'text-shadow')) {
+                                var x = getValue('gift', 'shadow-x');
+                                var y = getValue('gift', 'shadow-y');
+                                var b = getValue('gift', 'shadow-blur');
+                                var c = getValue('gift', 'shadow-color');
+                                tmp += ',\n' + x + 'px ' + y + 'px ' + b + 'px ' + c + ';';
+                            } else {
+                                tmp += ';';
+                            }
+                        } else {
+                            tmp += ',\n';
+                        }
+                    }
+                }
+            } else {
+                var x = getValue('heat', 'shadow-x');
+                var y = getValue('heat', 'shadow-y');
+                var b = getValue('heat', 'shadow-blur');
+                var c = getValue('heat', 'shadow-color');
+                tmp += x + 'px ' + y + 'px ' + b + 'px ' + c + ';';
+            }
+            return tmp;
+        }
+    },
 };
 
 var updateCallback = {
@@ -200,6 +249,9 @@ var updateCallback = {
     },
     'vote': function (s) {
         $('#vote').find('iframe').contents().find('body').find('style').html(s);
+    },
+    'gift': function (s) {
+        $('#gift').find('iframe').contents().find('body').find('style').html(s);
     },
 }
 
@@ -216,6 +268,11 @@ var copyURLCallback = {
         var iframe = $('#vote').find('iframe');
         var src = iframe.attr('src')
         return 'https://obs.joi-club.cn/' + src.slice(0, -5);
+    },
+    'gift': function () {
+        var iframe = $('#gift').find('iframe');
+        var src = iframe.attr('src')
+        return 'https://obs.joi-club.cn/' + src.slice(0, -5);
     }
 }
 
@@ -228,6 +285,9 @@ var copyCSSCallback = {
     },
     'vote': function () {
         return styles['vote'];
+    },
+    'gift': function () {
+        return styles['gift'];
     }
 }
 var update = function (event) {
@@ -240,12 +300,14 @@ var update = function (event) {
             updateStyle(panel, styles[panel]);
         }, false);
     }
-    if ($(event.srcElement).hasClass('room') || $(event.srcElement).hasClass('time') || $(event.srcElement).hasClass('opt')) {
+    if ($(event.srcElement).hasClass('room') || $(event.srcElement).hasClass('time') || $(event.srcElement).hasClass('opt') || $(event.srcElement).hasClass('template')) {
         $('.room').val(getValue(panel, 'room'));
         var iframe = $('#heat').find('iframe');
         var iframe2 = $('#vote').find('iframe');
+        var iframe3 = $('#gift').find('iframe');
         iframe.attr('src', 'heat/index.html?mid=' + getValue(panel, 'room'));
         iframe2.attr('src', 'vote/index.html?mid=' + getValue(panel, 'room') + '&option=' + getValue('vote', 'opt') + '&time=' + getValue('vote', 'time') + '&test');
+        iframe3.attr('src', 'gift/index.html?mid=' + getValue(panel, 'room') + '&time=' + getValue('gift', 'time') + '&template=' + getValue('gift', 'template') + '&test');
         iframe.get(0).addEventListener("load", function () {
             this.removeEventListener("load", arguments.call, false);
             updateStyle('heat', styles['heat']);
@@ -253,6 +315,10 @@ var update = function (event) {
         iframe2.get(0).addEventListener("load", function () {
             this.removeEventListener("load", arguments.call, false);
             updateStyle('vote', styles['vote']);
+        }, false);
+        iframe3.get(0).addEventListener("load", function () {
+            this.removeEventListener("load", arguments.call, false);
+            updateStyle('gift', styles['gift']);
         }, false);
     }
     render(panel);
@@ -278,6 +344,7 @@ var renderAll = function () {
     render('time');
     render('heat');
     render('vote');
+    render('gift')
 }
 
 var copy = function (e) {
@@ -292,7 +359,7 @@ var copy = function (e) {
 var inputs = document.querySelectorAll('input');
 inputs.forEach(function (input) {
     input.addEventListener('change', update);
-    if ($(input).hasClass('room') || $(input).hasClass('time') || $(input).hasClass('opt')) {
+    if ($(input).hasClass('room') || $(input).hasClass('time') || $(input).hasClass('opt') || $(input).hasClass('template')) {
 
     }
     else input.addEventListener('input', update);

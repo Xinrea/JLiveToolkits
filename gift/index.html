@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>RoomGift</title>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pako@2.0.1/dist/pako.min.js"></script>
+    <style>
+        .center {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            transform-origin: 0 0 0;
+            text-align: center;
+        }
+
+        .warning {
+            font-size: 8px;
+        }
+
+        #output {
+            transform: scale(0.8, 0.9) translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 1.5s, transform 1.7s;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <style></style>
+    <div class="center file-select">
+        <div>
+            <label for="image">图片</label>
+            <input type="file" accept="image/*" id="image" onchange="readImage(this)">
+        </div>
+        <div>
+            <label for="audio">音频</label>
+            <input type="file" accept="audio/*" id="audio" onchange="readAudio(this)">
+        </div>
+    </div>
+    <div class="center" id="output" hidden>
+        <div><img src="sample.gif" id="gif" /></div>
+        <p class="text"></p>
+    </div>
+    <audio id="sound" src="sample.mp3"></audio>
+    <div class="warning"></div>
+    <script src="./gift.js"></script>
+</body>
+
+</html>
