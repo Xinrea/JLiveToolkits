@@ -158,7 +158,7 @@ function timeCountdown() {
     if (time === 0) {
         isCounting = false;
         clearInterval(tc);
-		$('#time').text('');
+        $('#time').text('');
         $('#timeTag').text('投票已结束');
     }
     time--;

@@ -1,159 +1,161 @@
 <html>
 
 <head>
-  <meta charset="UTF-8">
-  <title>JLive Toolkits</title>
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
-  <style type="text/css">
-    body {
-      color: black;
-      font-family: 微软雅黑;
-      font-size: 80px;
-    }
-
-    a {
-      text-decoration: none;
-      color: black;
-      font-size: 60px;
-      margin: 20px 20px 20px 20px;
-      font-weight: bold;
-    }
-
-    span {
-      position: relative;
-      z-index: 1;
-    }
-
-    span::before {
-      content: '';
-      position: absolute;
-      z-index: -1;
-      top: 0;
-      bottom: 0;
-      left: -0.25em;
-      right: -0.25em;
-      background-color: hsla(341, 97%, 59%, 0.75);
-      transform-origin: center right;
-      transform: scaleX(0);
-      transition: transform 0.2s ease-in-out;
-    }
-
-    span:hover::before {
-      transform: scaleX(1);
-      transform-origin: center left;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>JLive Toolkits</title>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/uikit.min.css" />
+    <script src="js/uikit.min.js"></script>
+    <script src="js/uikit-icons.min.js"></script>
 </head>
 
 <body>
-  <div style="text-align:center;">
-    <h3>Joi's Live Toolbox</h3>
-    <a href="/clock/?format=HH:mm:ss"><span>时间</span></a>
-    <a href="/heat/?mid=21484828"><span>人气值</span></a>
-    <a href="/vote/?mid=21484828&option=50cm,51cm,53cm,60cm&time=30"><span>投票</span></a>
-  </div>
-  <div class="css-generate" style="text-align:center; margin-top: 100px;">
-    <div class="gFrame" style="height:300px;">
-      <p class="toolname" style="font-size:20px;">投票样式生成器</p>
-      <div style="display: inline-block">
-        <div style="float:left;"><iframe id="voteFrame" frameborder="0"
-            src="/vote/?mid=21484828&option=测试选项1,测试选项2,测试选项3&time=500&test" style="height:100%"></iframe></div>
-        <div style="float:left;margin-left:10px;"><textarea style="height:100%;width: 300px;" class="cssTextarea"
-            id="voteCSS"></textarea></div>
-        <div class="options" style="font-size:10px;float:left;margin-left:10px;text-align:left;">
-          <div><label for="text-size">文字大小: </label><input type="number" id="text-size" value="16"></div>
-          <div><label for="text-font">文字字体: </label><input type="text" id="text-font" value="微软雅黑"></div>
-          <div><label for="text-color">文字颜色: </label><input type="color" id="text-color"></div>
-          <div><label for="text-outcolor">描边颜色: </label><input type="color" id="text-outcolor" value="#ffffff"></div>
-          <div><label for="option-bgcolor">选项背景颜色: </label><input type="color" id="option-bgcolor" value="#ffffff">
-          </div>
-          <div><label for="option-ftcolor">选项进度颜色: </label><input type="color" id="option-ftcolor" value="#fc3171">
-          </div>
-          <div><label for="option-radius">选项圆角: </label><input type="number" id="option-radius" value="2"></div>
+    <div class="uk-container">
+        <h1 class="uk-text-center fix">JLive Toolkits <span class="uk-badge">beta</span> <a class="uk-badge"
+                style="background-color: #fb7299;" href="https://space.bilibili.com/475210">Xinrea</a> <a
+                class="uk-badge" style="background-color: #fb7299;"
+                href="https://space.bilibili.com/61639371">轴伊Joi_Channel</a>
+        </h1>
+        <div class="uk-alert-primary" style="text-align: center;" uk-alert>
+            <a class="uk-alert-close" uk-close></a>
+            <p>Tip: 安装新的字体后，需重启浏览器与OBS才能使用；不知道字体确切名称时，不妨在记事本里先试试。</p>
         </div>
-        <script>
-          var template = ['#output {',
-            'font-family:"{{text-font}}";',
-            'color: {{text-color}};',
-            'font-size: {{text-size}}px;',
-            '}',
-            '.optionBar {',
-            'background-color: {{option-ftcolor}};',
-            'border-radius: {{option-radius}}px;',
-            '}',
-            '.option {',
-            'background-color: {{option-bgcolor}};',
-            'border-radius: {{option-radius}}px;',
-            '}',
-            '{{text-outlines}}',
-          ].join('\n');
-
-          var mustacheRegex = /{{(.*?)}}/g;
-
-          var getValue = function (id) {
-            var input = document.querySelector('#' + id);
-            if (input) {
-              return input.value
-            }
-            return id;
-          }
-          var isChecked = function (id) {
-            return document.querySelector('#' + id).checked;
-          }
-          function isChinese(s) {
-            return /[\u4e00-\u9fa5]/.test(s);
-          }
-          function ch2Unicdoe(str) {
-            if (!str) {
-              return;
-            }
-            var unicode = '';
-            for (var i = 0; i < str.length; i++) {
-              var temp = str.charAt(i);
-              if (isChinese(temp)) {
-                unicode += '\\' + temp.charCodeAt(0).toString(16) + " ";
-              }
-              else {
-                unicode += temp;
-              }
-            }
-            return unicode;
-          }
-          var callbacks = {
-            'text-outlines': function (id) {
-              var size = 1;
-              return ['.stroke {',
-                'text-shadow:' + getValue('text-outcolor') + ' ' + size + 'px 0 0,' + getValue('text-outcolor') + ' 0 ' + size + 'px 0,' + getValue('text-outcolor') + ' -' + size + 'px 0 0,' + getValue('text-outcolor') + ' 0 -' + size + 'px 0;}'].join('\n');
-            },
-            'text-font': function (id) {
-              return ch2Unicdoe(getValue(id));
-            }
-          };
-          var update = function (event) {
-            var style = template.replace(mustacheRegex, function (match) {
-              var id = match.substring(2, match.length - 2);
-              if (callbacks[id]) {
-                return callbacks[id](id);
-              }
-              return getValue(id);
-            });
-            $('#voteCSS').val(style);
-            updateStyle();
-          }
-          var inputs = document.querySelectorAll('input');
-          inputs.forEach(function (input) {
-            input.addEventListener('change', update);
-            input.addEventListener('input', update);
-          });
-          function updateStyle() {
-            $('#voteFrame').contents().find('body').find('style').html($('#voteCSS').val());
-          };
-          $('#voteCSS').keyup(updateStyle);
-          update()
-        </script>
-      </div>
+        <hr class="uk-divider-icon">
+        <!-- 时间 -->
+        <div class="panel" style="margin: 0px auto; width: 800px; height: 600px" id="time">
+            <h3 class="uk-card-title"><span uk-icon="clock"></span> 时间</h3>
+            <div class=" time-preview">
+                <iframe src="clock/index.html?format=HH:mm:ss" height="500px" width="500px"
+                    style="border: 1px dotted gray; float: left;"></iframe>
+            </div>
+            <div class="options uk-margin-left" style="float: left;">
+                <div><label for="time-format">时间格式：</label>
+                    <select class="time-format">
+                        <option value="HH:mm:ss">24小时制</option>
+                        <option value="hh:mm:ss">12小时制</option>
+                    </select>
+                </div>
+                <hr class="uk-divider-small">
+                <div><label for="text-size">文字大小：</label><input type="number" class="text-size" value="16"></div>
+                <div><label for="text-font">文字字体：</label><input type="text" class="text-font" value="微软雅黑"></div>
+                <div><label for="text-color">文字颜色：</label><input type="color" class="text-color"></div>
+                <hr class="uk-divider-small">
+                <div><label for="text-stroke">启用描边：</label><input type="checkbox" class="text-stroke"></div>
+                <div><label for="stroke-size">描边大小：</label><input type="number" class="stroke-size" value="1"></div>
+                <div><label for="stroke-color">描边颜色：</label><input type="color" class="stroke-color" value="#ffffff">
+                </div>
+                <hr class="uk-divider-small">
+                <div><label for="text-shadow">启用阴影：</label><input type="checkbox" class="text-shadow"></div>
+                <div><label for="shadow-x">阴影偏移x：</label><input type="number" class="shadow-x" value="1"></div>
+                <div><label for="shadow-y">阴影偏移y：</label><input type="number" class="shadow-y" value="1"></div>
+                <div><label for="shadow-blur">阴影模糊：</label><input type="number" class="shadow-blur" value="0"></div>
+                <div><label for="shadow-color">阴影颜色：</label><input type="color" class="shadow-color" value="#ffffff">
+                    <div class="uk-margin-top">
+                        <button class="uk-button uk-button-default uk-button-small url-btn">复制URL</button>
+                        <button class="uk-button uk-button-default uk-button-small css-btn">复制CSS</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="uk-divider-icon">
+        <!-- 人气值 -->
+        <div class="panel" style="margin: 0px auto; width: 800px; height: 600px;" id="heat">
+            <h3 class="uk-card-title"><span uk-icon="heart"></span> 人气值</h3>
+            <div class=" time-preview">
+                <iframe src="heat/index.html?mid=21484828" height="500px" width="500px"
+                    style="border: 1px dotted gray; float: left;"></iframe>
+            </div>
+            <div class="options uk-margin-left" style="float: left;">
+                <div><label for="room">房间号：</label><input type="text" class="room" value="21484828"></div>
+                <hr class="uk-divider-small">
+                <div><label for="text-size">文字大小：</label><input type="number" class="text-size" value="16"></div>
+                <div><label for="text-font">文字字体：</label><input type="text" class="text-font" value="微软雅黑"></div>
+                <div><label for="text-color">文字颜色：</label><input type="color" class="text-color"></div>
+                <hr class="uk-divider-small">
+                <div><label for="text-stroke">启用描边：</label><input type="checkbox" class="text-stroke"></div>
+                <div><label for="stroke-size">描边大小：</label><input type="number" class="stroke-size" value="1"></div>
+                <div><label for="stroke-color">描边颜色：</label><input type="color" class="stroke-color" value="#ffffff">
+                </div>
+                <hr class="uk-divider-small">
+                <div><label for="text-shadow">启用阴影：</label><input type="checkbox" class="text-shadow"></div>
+                <div><label for="shadow-x">阴影偏移x：</label><input type="number" class="shadow-x" value="1"></div>
+                <div><label for="shadow-y">阴影偏移y：</label><input type="number" class="shadow-y" value="1"></div>
+                <div><label for="shadow-blur">阴影模糊：</label><input type="number" class="shadow-blur" value="0"></div>
+                <div><label for="shadow-color">阴影颜色：</label><input type="color" class="shadow-color" value="#ffffff">
+                    <div class="uk-margin-top">
+                        <button class="uk-button uk-button-default uk-button-small url-btn">复制URL</button>
+                        <button class="uk-button uk-button-default uk-button-small css-btn">复制CSS</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="uk-divider-icon">
+        <!-- 投票 -->
+        <div class="panel" style="margin: 0px auto; width: 800px; height: 800px;" id="vote">
+            <h3 class="uk-card-title"><span uk-icon="comments"></span> 投票</h3>
+            <div class=" time-preview">
+                <iframe src="vote/index.html?mid=21484828&option=测试选项1,测试选项2,测试选项3&time=300&test" height="750px"
+                    width="500px" style="border: 1px dotted gray; float: left;"></iframe>
+            </div>
+            <div class="options uk-margin-left" style="float: left;">
+                <div><label for="room">房间号：</label><input type="text" class="room" value="21484828"></div>
+                <div><label for="opt">选项：</label><input type="text" class="opt" value="测试选项1,测试选项2,测试选项3"
+                        style="width: 210px;">
+                </div>
+                <div><label for="time">倒计时：</label><input type="number" class="time" value="300"></div>
+                <hr class="uk-divider-small">
+                <div><label for="text-size">文字大小: </label><input type="number" class="text-size" value="16"></div>
+                <div><label for="text-font">文字字体: </label><input type="text" class="text-font" value="微软雅黑"></div>
+                <div><label for="text-color">文字颜色: </label><input type="color" class="text-color"></div>
+                <hr class="uk-divider-small">
+                <div><label for="text-stroke">启用描边：</label><input type="checkbox" class="text-stroke"></div>
+                <div><label for="stroke-size">描边大小：</label><input type="number" class="stroke-size" value="1"></div>
+                <div><label for="stroke-color">描边颜色：</label><input type="color" class="stroke-color" value="#ffffff">
+                </div>
+                <hr class="uk-divider-small">
+                <div><label for="text-shadow">启用阴影：</label><input type="checkbox" class="text-shadow"></div>
+                <div><label for="shadow-x">阴影偏移x：</label><input type="number" class="shadow-x" value="1"></div>
+                <div><label for="shadow-y">阴影偏移y：</label><input type="number" class="shadow-y" value="1"></div>
+                <div><label for="shadow-blur">阴影模糊：</label><input type="number" class="shadow-blur" value="0"></div>
+                <div><label for="shadow-color">阴影颜色：</label><input type="color" class="shadow-color" value="#ffffff">
+                </div>
+                <hr class="uk-divider-small">
+                <div><label for="option-bgcolor">选项背景颜色: </label><input type="color" class="option-bgcolor"
+                        value="#ffffff">
+                </div>
+                <div><label for="option-ftcolor">选项进度颜色: </label><input type="color" class="option-ftcolor"
+                        value="#fc3171">
+                </div>
+                <div><label for="option-radius">选项圆角: </label><input type="number" class="option-radius" value="2">
+                </div>
+                <div><label for="box-shadow">启用选项阴影：</label><input type="checkbox" class="box-shadow"></div>
+                <div><label for="box-x">阴影偏移x：</label><input type="number" class="box-x" value="1"></div>
+                <div><label for="box-y">阴影偏移y：</label><input type="number" class="box-y" value="1"></div>
+                <div><label for="box-blur">阴影模糊：</label><input type="number" class="box-blur" value="0"></div>
+                <div><label for="box-color">阴影颜色：</label><input type="color" class="box-color" value="#ffffff"></div>
+                <div class="uk-margin-top">
+                    <button class="uk-button uk-button-default uk-button-small url-btn">复制URL</button>
+                    <button class="uk-button uk-button-default uk-button-small css-btn">复制CSS</button>
+                </div>
+            </div>
+        </div>
+        <div style="margin: 50px auto; width: 800px;">
+            <article class="uk-article">
+                <h1 class="uk-article-title">关于投票的说明</h1>
+                <p class="uk-text-lead" uk-text>
+                    <li>选项间请使用英文逗号"<code>,</code>"隔开，受英文字母数量限制，请不要超过26个；</li>
+                    <li>OBS浏览器源内刷新网页缓存，即可重新开始计时；计时结束自动停止计票；</li>
+                    <li>一人只能投一票，投票需要发送的弹幕中包含大写英文字母<code>A,B,C,D</code>等选项。</li>
+                    如果此页面的工具有帮助到你，不妨关注一下作者<a href="https://space.bilibili.com/475210">@Xinrea</a>以及他的单推对象<a
+                        href="https://space.bilibili.com/61639371">@轴伊Joi_Channel</a>，十分感谢。
+                </p>
+            </article>
+        </div>
     </div>
-  </div>
+    </div>
+    <script src="cssgen.js"></script>
 </body>
 
 </html>
