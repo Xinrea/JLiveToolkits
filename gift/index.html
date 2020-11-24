@@ -29,17 +29,19 @@
     </style>
 </head>
 
-<body>
+<body ondblclick="clearStorage()">
     <style></style>
-    <div class="center file-select">
-        <div>
+    <div class="center file-select" style="text-align: center;">
+        <div style="margin: 10px auto; width: 200px;display: inline-block;">
             <label for="image">图片</label>
             <input type="file" accept="image/*" id="image" onchange="readImage(this)">
         </div>
-        <div>
+        <div style="margin: 10px auto; width: 200px;display: inline-block;">
             <label for="audio">音频</label>
             <input type="file" accept="audio/*" id="audio" onchange="readAudio(this)">
         </div>
+        <button style="margin: 10px; width: 100%;" onclick="defaultStart()">使用图片音频默认设置</button>
+        <p>默认素材来自<a href="https://space.bilibili.com/61639371">@轴伊Joi_Channel</a></p>
     </div>
     <div class="center" id="output" hidden>
         <div><img src="sample.gif" id="gif" /></div>

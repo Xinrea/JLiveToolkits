@@ -22,6 +22,9 @@
             <a class="uk-alert-close" uk-close></a>
             <p>Tip: 安装新的字体后，需重启浏览器与OBS才能使用；不知道字体确切名称时，不妨在记事本里先试试。</p>
         </div>
+        如果此页面的工具有帮助到你，不妨关注一下作者<a href="https://space.bilibili.com/475210">@Xinrea</a>以及他的单推对象<a
+            href="https://space.bilibili.com/61639371">@轴伊Joi_Channel</a>，十分感谢。如果遇到问题或是有好的建议，请私信<a
+            href="https://space.bilibili.com/475210">@Xinrea</a>反馈。
         <hr class="uk-divider-icon">
         <!-- 时间 -->
         <div class="panel" style="margin: 0px auto; width: 800px; height: 600px;" id="time">
@@ -161,14 +164,20 @@
                     uk-icon="icon: credit-card; ratio: 3"></span> 礼物机
             </h3>
             <div class=" time-preview">
-                <iframe src="gift/index.html?mid=21484828&time=3&template=感谢{{usr}}{{action}}的{{num}}个{{gift}}&test"
+                <iframe
+                    src="gift/index.html?mid=21484828&time=3&template=感谢{{usr}}{{action}}的{{num}}个{{gift}}&template-guard=感谢{{usr}}的{{guard}}&template-sc={{usr}}的{{num}}元SC：{{superchat}}&test"
                     height="600px" width="800px" style="border: 1px dotted gray; float: left;"></iframe>
             </div>
             <div class="options uk-margin-left" style="float: left;">
                 <div><label for="room">房间号：</label><input type="text" class="room" value="21484828"></div>
-                <div><label for="template">文字模板：</label><input type="text" class="template"
+                <div><label for="template">礼物感谢模板：</label><input type="text" class="template"
                         value="感谢{{usr}}{{action}}的{{num}}个{{gift}}" style="width: 300px;"></div>
-                <div><label for="time">动画时长</label><input type="number" class="time" value="3"></div>
+                <div><label for="template-guard">舰长感谢模板：</label><input type="text" class="template-guard"
+                        value="感谢{{usr}}的{{guard}}" style="width: 300px;"></div>
+                <div><label for="template-sc">SC感谢模板：</label><input type="text" class="template-sc"
+                        value="{{usr}}的{{num}}元SC：{{superchat}}" style="width: 300px;"></div>
+                <div><label for="time">动画时长：</label><input type="number" class="time" value="3"></div>
+                <div><label for="silver">感谢免费礼物：</label><input type="checkbox" class="silver"></div>
                 <hr class="uk-divider-small">
                 <div><label for="text-size">文字大小：</label><input type="number" class="text-size" value="16"></div>
                 <div><label for="text-font">文字字体：</label><input type="text" class="text-font" value="微软雅黑"></div>
@@ -189,19 +198,21 @@
                         <button class="uk-button uk-button-default uk-button-small url-btn">复制URL</button>
                         <button class="uk-button uk-button-default uk-button-small css-btn">复制CSS</button>
                     </div>
+
                 </div>
             </div>
         </div>
         <div style="margin: 50px auto; width: 800px;">
             <article class="uk-article">
-                <h1 class="uk-article-title" style="font-size: 30px;">有关礼物机的说明</h1>
+                <h1 class="uk-article-title" style="font-size: 30px;">有关礼物机的说明<span style="color: red;">（重要）</span></h1>
                 <p class="uk-text-lead" uk-text>
-                    <li>模板中<code>{{usr}}</code><code>{{action}}</code><code>{{num}}</code><code>{{gift}}</code>会被替换成对应的文字，详情请参考示例理解；
+                    <li>浏览器不允许自动播放音频，所以上面的预览需要你点击预览部分后，才能够正常播放声音（OBS中无需此操作）。</li>
+                    <li>模板中<code>{{usr}}</code><code>{{action}}</code><code>{{num}}</code><code>{{gift}}</code>等会被替换成对应的文字，详情请参考示例理解；
                     </li>
-                    <li>由于网页无法直接使用本地文件，必须经过用户操作，因此在OBS中添加浏览器源后，请右键该源，选择倒数第三项<code>互动</code>，然后便可像在普通浏览器中一样，点击设置图片和音频了；
+                    <li>在OBS中添加浏览器源后，请右键该源，选择倒数第三项<code>互动</code>，然后便可像在普通浏览器中一样，点击设置图片和音频了；
                     </li>
-                    如果此页面的工具有帮助到你，不妨关注一下作者<a href="https://space.bilibili.com/475210">@Xinrea</a>以及他的单推对象<a
-                        href="https://space.bilibili.com/61639371">@轴伊Joi_Channel</a>，十分感谢。
+                    <li>图片和音频设置会自动保存，刷新或重新添加源或重启OBS，均会自动加载设置；如果想要清除设置，请在OBS浏览器源的互动模式下双击网页，然后刷新网页缓存即可（示例页面设置的清除同理）。</li>
+                    <li>如果不想自己听到音效，可以在OBS浏览器源的设置中，勾选<code>将音频重新路由到OBS</code>。</li>
                 </p>
             </article>
         </div>

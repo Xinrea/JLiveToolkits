@@ -15,13 +15,27 @@ function sleep(time) {
     return new Promise((resolve) => setTimeout(resolve, time));
 }
 
+
 var output = document.getElementById("output");
 var mid = urlParams["mid"];
-var anitime = urlParams["time"] * 1000;
+var anitime = 5000;
 var inAnimation = false;
+var silver = false;
 var mustacheRegex = /{{(.*?)}}/g;
-var template = '感谢{{usr}}{{action}}的{{num}}个{{gift}}!';
+var template = {
+    'gift': '感谢{{usr}}{{action}}的{{num}}个{{gift}}!',
+    'guard': '感谢{{usr}}的{{guard}}',
+    'superchat': '{{usr}}的{{num}}元SC：{{superchat}}'
+};
 var test = urlParams.hasOwnProperty('test');
+
+
+if (urlParams.hasOwnProperty("template")) template['gift'] = urlParams["template"];
+if (urlParams.hasOwnProperty("template-guard")) template['guard'] = urlParams["template-guard"];
+if (urlParams.hasOwnProperty("template-sc")) template['superchat'] = urlParams["template-sc"];
+if (urlParams.hasOwnProperty("time")) anitime = urlParams["time"] * 1000;
+if (urlParams.hasOwnProperty("silver")) silver = urlParams["silver"] === 'true';
+
 var callbacks = {
     'usr': function (d) {
         return '<span class="key">' + d.user + '</span>';
@@ -35,33 +49,80 @@ var callbacks = {
     'gift': function (d) {
         return '<span class="key">' + d.gift + '</span>';
     },
+    'superchat': function (d) {
+        return '<span class="key">' + d.superchat + '</span>';
+    },
+    'guard': function (d) {
+        var title;
+        switch (d.guard) {
+            case 1:
+                title = '总督';
+                break;
+            case 2:
+                title = '提督';
+                break;
+            case 3:
+                title = '舰长';
+                break;
+            default:
+                title = '上船';
+        }
+        return '<span class="key">' + title + '</span>';
+    }
 }
 
+var ImgStorage = localStorage.getItem('gift-img');
+var AudioStorage = localStorage.getItem('gift-audio');
 var imgSet = false;
 var audioSet = false;
 var image = $('#gif')
 var audio = $('#sound');
 audio.prop('muted', true);
-audio[0].addEventListener('ended', function () {
-    if (giftQueue.size() != 0) {
-        if (!test) showGift();
+
+if (ImgStorage) {
+    image.attr('src', ImgStorage);
+    imgSet = true;
+}
+
+if (AudioStorage) {
+    audio.attr('src', AudioStorage);
+    audioSet = true;
+}
+
+
+function tryStart() {
+    if (imgSet && audioSet) {
+        $('.file-select').prop('hidden', true);
+        $('#output').prop('hidden', false);
+        audio.prop('muted', false);
     }
-}, false);
+}
+
+tryStart();
+
+function defaultStart() {
+    imgSet = true;
+    audioSet = true;
+    tryStart();
+    showGift();
+}
+
+
+function clearStorage() {
+    localStorage.removeItem('gift-img');
+    localStorage.removeItem('gift-audio');
+}
+
 function readImage(input) {
     if (input.files && input.files[0]) {
         var URL = window.URL || window.webkitURL;
         var file = input.files[0];
-
-        image[0].onload = function () {
-            if (input.width) {
-                var FR = new FileReader();
-                FR.addEventListener("load", function (e) {
-                    var buffer = e.target.result;
-                    document.getElementById("avatar-preview").src = buffer;
-                });
-                FR.readAsDataURL(file);
-            }
-        };
+        var FR = new FileReader();
+        FR.addEventListener("load", function (e) {
+            var buffer = e.target.result;
+            localStorage.setItem("gift-img", buffer);
+        });
+        FR.readAsDataURL(file);
         image[0].src = URL.createObjectURL(file);
         imgSet = true;
         $('#image-form').prop('hidden', true)
@@ -76,16 +137,12 @@ function readAudio(input) {
     if (input.files && input.files[0]) {
         var URL = window.URL || window.webkitURL;
         var file = input.files[0];
-
-        image.onload = function () {
-            if (input.width) {
-                var FR = new FileReader();
-                FR.addEventListener("load", function (e) {
-                    var buffer = e.target.result;
-                });
-                FR.readAsDataURL(file);
-            }
-        };
+        var FR = new FileReader();
+        FR.addEventListener("load", function (e) {
+            var buffer = e.target.result;
+            localStorage.setItem("gift-audio", buffer);
+        });
+        FR.readAsDataURL(file);
         audio[0].src = URL.createObjectURL(file);
         audioSet = true;
         $('#audio-form').prop('hidden', true)
@@ -96,8 +153,6 @@ function readAudio(input) {
         }
     }
 }
-
-if (urlParams.hasOwnProperty("template")) template = urlParams["template"];
 
 if (!window.hasOwnProperty('obsstudio')) {
 }
@@ -118,11 +173,31 @@ class GiftQueue {
         };
         //获取队首  
         this.getFront = function () {
-            if (test) return {
-                'action': '投喂',
-                'user': 'Xinrea',
-                'num': '99999',
-                'gift': '小电视飞船'
+            if (test) {
+                var rd = Math.floor((Math.random() * 3));
+                switch (rd) {
+                    case 0:
+                        return {
+                            'type': 'gift',
+                            'action': '投喂',
+                            'user': 'Xinrea',
+                            'num': '99999',
+                            'gift': '小电视飞船'
+                        }
+                    case 1:
+                        return {
+                            'type': 'guard',
+                            'user': 'Xinrea',
+                            'guard': 1
+                        }
+                    case 2:
+                        return {
+                            'type': 'superchat',
+                            'user': 'Xinrea',
+                            'num': '1000',
+                            'superchat': '测试superchat'
+                        }
+                }
             }
             return arr[0];
         };
@@ -246,10 +321,26 @@ ws.onmessage = async function (msgEvent) {
                         //console.log(`${body.info[2][1]}: ${body.info[1]}`);
                         break;
                     case 'SEND_GIFT':
-                        if (test) break;
                         if (!(imgSet && audioSet)) break;
-                        NewGift(body);
-                        if (audio[0].paused && !inAnimation) showGift();
+                        NewGift('gift', body);
+                        break;
+                    case 'COMBO_SEND':
+                        if (!(imgSet && audioSet)) break;
+                        NewGift('combo', body);
+                        break;
+                    case 'GUARD_BUY':
+                        if (!(imgSet && audioSet)) break;
+                        NewGift('guard', body);
+                        //if (audio[0].paused && !inAnimation) showGift();
+                        break;
+                    case 'USER_TOAST_MSG':
+                        if (!(imgSet && audioSet)) break;
+                        NewGift('guard', body);
+                        //if (audio[0].paused && !inAnimation) showGift();
+                        break;
+                    case 'SUPER_CHAT_MESSAGE_JPN':
+                        if (!(imgSet && audioSet)) break;
+                        NewGift('superchat', body);
                         break;
                     case 'WELCOME':
                         break;
@@ -263,35 +354,92 @@ ws.onmessage = async function (msgEvent) {
     }
 };
 
-function NewGift(raw) {
-    var d = {
-        'action': raw.data.action,
-        'user': raw.data.uname,
-        'num': raw.data.num,
-        'gift': raw.data.giftName
+function NewGift(type, raw) {
+    var d = null;
+    switch (type) {
+        case 'gift': {
+            // 小心心会在之后以combo_send的形式出现
+            if (raw.data.giftName === '小心心') break;
+            // 其它银瓜子礼物
+            if (raw.data.coin_type != 'gold' && silver) {
+                d = {
+                    'type': 'gift',
+                    'action': raw.data.action,
+                    'user': raw.data.uname,
+                    'num': raw.data.num,
+                    'gift': raw.data.giftName
+                }
+                break;
+            }
+            if (raw.data.coin_type != 'gold' && !silver) break;
+            // 其它金瓜子礼物
+            d = {
+                'type': 'gift',
+                'action': raw.data.action,
+                'user': raw.data.uname,
+                'num': raw.data.num,
+                'gift': raw.data.giftName
+            }
+            break;
+        }
+        case 'combo': {
+            // 好像只有小心心会这样显示
+            if (!silver) break;
+            d = {
+                'type': 'gift',
+                'action': raw.data.action,
+                'user': raw.data.uname,
+                'num': raw.data.batch_combo_num,
+                'gift': raw.data.gift_name
+            }
+            break;
+        }
+        case 'guard':
+            d = {
+                'type': 'guard',
+                'user': raw.data.username,
+                'guard': raw.data.guard_level
+            }
+            break;
+        case 'superchat':
+            d = {
+                'type': 'superchat',
+                'user': raw.data.user_info.uname,
+                'superchat': raw.data.message,
+                'num': raw.data.price
+            }
+            break;
+        default:
+            break;
     }
-    giftQueue.push(d);
+    if (d) {
+        giftQueue.push(d);
+        if (audio[0].paused && !inAnimation) showGift();
+    }
 }
 
 function showGift() {
+    if (inAnimation) return;
+    console.log(giftQueue.size() + " in queue");
     var d = giftQueue.getFront();
     giftQueue.pop();
     $('.text').html(render(d));
     inAnimation = true;
     $('#output')[0].style.opacity = 1;
     $('#output')[0].style.transform = 'scale(1,1) translate(-50%, -50%)';
-    audio[0].play();
     sleep(anitime).then(() => {
         $('#output')[0].style.opacity = 0;
         $('#output')[0].style.transform = 'scale(0.8,0.9) translate(-50%, -50%)';
         sleep(1700).then(() => {
             inAnimation = false;
+            if (giftQueue.size() > 0) showGift();
         });
     })
+    audio[0].play();
 }
 
 function render(data) {
-    var text = template.replace(mustacheRegex, function (match) {
+    var text = template[data.type].replace(mustacheRegex, function (match) {
         var id = match.substring(2, match.length - 2);
         if (callbacks[id]) {
             return callbacks[id](data);
@@ -299,10 +447,4 @@ function render(data) {
         return id;
     });
     return text;
-}
-
-if (test) {
-    setInterval(() => {
-        if (audio[0].paused && !inAnimation) showGift();
-    }, 3000);
 }
