@@ -5,29 +5,40 @@
     <title>JLive Toolkits</title>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/uikit.min.css" />
     <script src="js/uikit.min.js"></script>
     <script src="js/uikit-icons.min.js"></script>
+    <style>
+        .title {
+            font-size: 100px;
+        }
+
+        .uk-badge {
+            margin-left: 5px;
+        }
+    </style>
 </head>
 
 <body>
     <div class="uk-container">
-        <h1 class="uk-text-center fix">JLive Toolkits <span class="uk-badge">beta</span> <a class="uk-badge"
-                style="background-color: #fb7299;" href="https://space.bilibili.com/475210">Xinrea</a> <a
-                class="uk-badge" style="background-color: #fb7299;"
-                href="https://space.bilibili.com/61639371">轴伊Joi_Channel</a>
-        </h1>
+        <p class="uk-text-center title animate__animated animate__fadeInLeft">JLive Toolkits <span
+                class="uk-badge">beta</span><a class="uk-badge" style="background-color: #fb7299;"
+                href="https://space.bilibili.com/475210">Xinrea</a><a class="uk-badge"
+                style="background-color: #fb7299;" href="https://space.bilibili.com/61639371">轴伊Joi_Channel</a>
+        </p>
         <div class="uk-alert-primary" style="text-align: center;" uk-alert>
             <a class="uk-alert-close" uk-close></a>
             <p>Tip: 安装新的字体后，需重启浏览器与OBS才能使用；不知道字体确切名称时，不妨在记事本里先试试。</p>
         </div>
-        如果此页面的工具有帮助到你，不妨关注一下作者<a href="https://space.bilibili.com/475210">@Xinrea</a>以及他的单推对象<a
-            href="https://space.bilibili.com/61639371">@轴伊Joi_Channel</a>，十分感谢。如果遇到问题或是有好的建议，请私信<a
-            href="https://space.bilibili.com/475210">@Xinrea</a>反馈。
+        <p>如果此页面的工具有帮助到你，不妨关注一下作者<a href="https://space.bilibili.com/475210">@Xinrea</a>以及他的单推对象<a
+                href="https://space.bilibili.com/61639371">@轴伊Joi_Channel</a>，十分感谢。如果遇到问题或是有好的建议，请私信<a
+                href="https://space.bilibili.com/475210">@Xinrea</a>反馈。</p>
         <hr class="uk-divider-icon">
         <!-- 时间 -->
-        <div class="panel" style="margin: 0px auto; width: 800px; height: 600px;" id="time">
+        <div class="panel animate__animated animate__bounceIn" style="margin: 0px auto; width: 800px; height: 600px;"
+            id="time">
             <h3 class="uk-card-title" style="font-size: 40px; text-align: center;"><span
                     uk-icon="icon: clock; ratio: 3"></span> 时间</h3>
             <div class=" time-preview">
@@ -65,7 +76,8 @@
         </div>
         <hr class="uk-divider-icon">
         <!-- 人气值 -->
-        <div class="panel" style="margin: 0px auto; width: 800px; height: 600px;" id="heat">
+        <div class="panel animate__animated animate__bounceIn" style="margin: 0px auto; width: 800px; height: 600px;"
+            id="heat">
             <h3 class="uk-card-title" style="font-size: 40px; text-align: center;"><span
                     uk-icon="icon: heart; ratio: 3"></span> 人气值</h3>
             <div class=" time-preview">
@@ -98,7 +110,8 @@
         </div>
         <hr class="uk-divider-icon">
         <!-- 投票 -->
-        <div class="panel" style="margin: 0px auto; width: 800px; height: 800px;" id="vote">
+        <div class="panel animate__animated animate__bounceIn" style="margin: 0px auto; width: 800px; height: 800px;"
+            id="vote">
             <h3 class="uk-card-title" style="font-size: 40px; text-align: center;"><span
                     uk-icon="icon: comments; ratio: 3"></span> 投票</h3>
             <div class=" time-preview">
@@ -140,7 +153,8 @@
                 <div><label for="box-x">阴影偏移x：</label><input type="number" class="box-x" value="1"></div>
                 <div><label for="box-y">阴影偏移y：</label><input type="number" class="box-y" value="1"></div>
                 <div><label for="box-blur">阴影模糊：</label><input type="number" class="box-blur" value="0"></div>
-                <div><label for="box-color">阴影颜色：</label><input type="color" class="box-color" value="#ffffff"></div>
+                <div><label for="box-color">阴影颜色：</label><input type="color" class="box-color" value="#ffffff">
+                </div>
                 <div class="uk-margin-top">
                     <button class="uk-button uk-button-default uk-button-small url-btn">复制URL</button>
                     <button class="uk-button uk-button-default uk-button-small css-btn">复制CSS</button>
@@ -159,7 +173,8 @@
         </div>
         <hr class="uk-divider-icon">
         <!-- 礼物机 -->
-        <div class="panel" style="margin: 0px auto; width: 1300px; height: 700px;" id="gift">
+        <div class="panel animate__animated animate__bounceIn" style="margin: 0px auto; width: 1300px; height: 700px;"
+            id="gift">
             <h3 class="uk-card-title" style="font-size: 40px; text-align: center;"><span
                     uk-icon="icon: credit-card; ratio: 3"></span> 礼物机
             </h3>
@@ -204,14 +219,16 @@
         </div>
         <div style="margin: 50px auto; width: 800px;">
             <article class="uk-article">
-                <h1 class="uk-article-title" style="font-size: 30px;">有关礼物机的说明<span style="color: red;">（重要）</span></h1>
+                <h1 class="uk-article-title" style="font-size: 30px;">有关礼物机的说明<span style="color: red;">（重要）</span>
+                </h1>
                 <p class="uk-text-lead" uk-text>
                     <li>浏览器不允许自动播放音频，所以上面的预览需要你点击预览部分后，才能够正常播放声音（OBS中无需此操作）。</li>
                     <li>模板中<code>{{usr}}</code><code>{{action}}</code><code>{{num}}</code><code>{{gift}}</code>等会被替换成对应的文字，详情请参考示例理解；文字需要换行请在模板中添加<code>&lt;br&gt;</code>。
                     </li>
                     <li>在OBS中添加浏览器源后，请右键该源，选择倒数第三项<code>互动</code>，然后便可像在普通浏览器中一样，点击设置图片和音频了；
                     </li>
-                    <li>图片和音频设置会自动保存，刷新或重新添加源或重启OBS，均会自动加载设置；如果想要清除设置，请在OBS浏览器源的互动模式下双击网页，然后刷新网页即可（示例页面设置的清除同理）。</li>
+                    <li>图片和音频设置会自动保存，刷新或重新添加源或重启OBS，均会自动加载设置；如果想要清除设置，请在OBS浏览器源的互动模式下双击网页，然后刷新网页即可（示例页面设置的清除同理）。
+                    </li>
                     <li>如果不想自己听到音效，可以在OBS浏览器源的设置中，勾选<code>将音频重新路由到OBS</code>。</li>
                 </p>
             </article>
