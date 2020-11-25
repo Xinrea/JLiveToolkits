@@ -229,10 +229,10 @@ var callbacks = {
                     }
                 }
             } else {
-                var x = getValue('heat', 'shadow-x');
-                var y = getValue('heat', 'shadow-y');
-                var b = getValue('heat', 'shadow-blur');
-                var c = getValue('heat', 'shadow-color');
+                var x = getValue('gift', 'shadow-x');
+                var y = getValue('gift', 'shadow-y');
+                var b = getValue('gift', 'shadow-blur');
+                var c = getValue('gift', 'shadow-color');
                 tmp += x + 'px ' + y + 'px ' + b + 'px ' + c + ';';
             }
             return tmp;
