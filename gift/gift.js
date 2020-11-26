@@ -425,6 +425,9 @@ function showGift() {
     giftQueue.pop();
     $('.text').html(render(d));
     inAnimation = true;
+    var src = image.attr('src');
+    image.attr('src', '');
+    image.attr('src', src);
     $('#output')[0].style.opacity = 1;
     $('#output')[0].style.transform = 'scale(1,1) translate(-50%, -50%)';
     sleep(anitime).then(() => {
