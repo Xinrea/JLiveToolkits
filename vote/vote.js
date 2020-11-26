@@ -28,7 +28,7 @@ for (var op in opArray) {
 
 if (urlParams.hasOwnProperty('test')) {
     var sOp = $('#op_A');
-    sOp.children('.optionBar').css({ 'right': 30 + "%" });
+    sOp.children('.optionBar').css({ 'right': 90 + "%" });
 }
 
 function createOption(index, op) {
@@ -176,6 +176,7 @@ ws.onmessage = async function (msgEvent) {
             packet.body.forEach((body) => {
                 switch (body.cmd) {
                     case 'DANMU_MSG':
+                        if (body.info[0][9] > 0) break;
                         if (isCounting) validVote(body.info[1], body.info[2][0]);
                         console.log(`${body.info[2][1]}: ${body.info[1]}`);
                         break;

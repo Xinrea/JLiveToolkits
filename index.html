@@ -46,6 +46,9 @@
                     style="border: 1px dotted gray; float: left;"></iframe>
             </div>
             <div class="options uk-margin-left" style="float: left;">
+                <div><label for="opacity">透明度：</label><input type="range" class="opacity" max="1" min="0" value="1"
+                        step="0.01">
+                </div>
                 <div><label for="time-format">时间格式：</label>
                     <select class="time-format">
                         <option value="HH:mm:ss">24小时制</option>
@@ -85,6 +88,9 @@
                     style="border: 1px dotted gray; float: left;"></iframe>
             </div>
             <div class="options uk-margin-left" style="float: left;">
+                <div><label for="opacity">透明度：</label><input type="range" class="opacity" max="1" min="0" value="1"
+                        step="0.01">
+                </div>
                 <div><label for="room">房间号：</label><input type="text" class="room" value="21484828"></div>
                 <hr class="uk-divider-small">
                 <div><label for="text-size">文字大小：</label><input type="number" class="text-size" value="16"></div>
@@ -119,6 +125,9 @@
                     width="500px" style="border: 1px dotted gray; float: left;"></iframe>
             </div>
             <div class="options uk-margin-left" style="float: left;">
+                <div><label for="opacity">透明度：</label><input type="range" class="opacity" max="1" min="0" value="1"
+                        step="0.01">
+                </div>
                 <div><label for="room">房间号：</label><input type="text" class="room" value="21484828"></div>
                 <div><label for="opt">选项：</label><input type="text" class="opt" value="测试选项1,测试选项2,测试选项3"
                         style="width: 210px;">
@@ -167,7 +176,11 @@
                 <p class="uk-text-lead" uk-text>
                     <li>选项间请使用英文逗号"<code>,</code>"隔开，受英文字母数量限制，请不要超过26个；</li>
                     <li>OBS浏览器源内刷新网页缓存，即可重新开始计时；计时结束自动停止计票；</li>
-                    <li>一人只能投一票，投票需要发送的弹幕中包含大写英文字母<code>A,B,C,D</code>等选项。</li>
+                    <li>一人只能投一票，投票需要发送的弹幕中包含大写英文字母<code>A,B,C,D</code>等选项；</li>
+                    <li>投票已自动屏蔽礼物弹幕（如节奏风暴）；</li>
+                    <li>单纯修改房间/选项/时间的话，可以直接手动修改浏览器源的URL，例如：<br>
+                        https://obs.joi-club.cn/vote/index.html?mid=<code>21484828</code>&option=<code>测试选项1,测试选项2,测试选项3</code>&time=<code>300</code>
+                    </li>
                 </p>
             </article>
         </div>

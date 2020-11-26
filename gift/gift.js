@@ -89,22 +89,19 @@ if (AudioStorage) {
     audioSet = true;
 }
 
-
 function tryStart() {
     if (imgSet && audioSet) {
         $('.file-select').prop('hidden', true);
         $('#output').prop('hidden', false);
         audio.prop('muted', false);
+        showGift();
     }
 }
-
-tryStart();
 
 function defaultStart() {
     imgSet = true;
     audioSet = true;
     tryStart();
-    showGift();
 }
 
 
@@ -130,6 +127,7 @@ function readImage(input) {
             $('.file-select').prop('hidden', true);
             $('#output').prop('hidden', false);
             audio.prop('muted', false);
+            tryStart();
         }
     }
 }
@@ -150,6 +148,7 @@ function readAudio(input) {
             $('.file-select').prop('hidden', true);
             $('#output').prop('hidden', false);
             audio.prop('muted', false);
+            tryStart();
         }
     }
 }
@@ -421,6 +420,7 @@ function NewGift(type, raw) {
 function showGift() {
     if (inAnimation) return;
     console.log(giftQueue.size() + " in queue");
+    if (giftQueue.size() <= 0) return;
     var d = giftQueue.getFront();
     giftQueue.pop();
     $('.text').html(render(d));
@@ -448,3 +448,5 @@ function render(data) {
     });
     return text;
 }
+
+tryStart();
