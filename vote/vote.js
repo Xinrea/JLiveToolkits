@@ -56,7 +56,13 @@ function refreshCount() {
 function validVote(m, s) {
     if (senderMap.has(s)) return false;
     for (var i = 0; i < m.length; i++) {
-        var f = voteArray.indexOf(m.charAt(i));
+        var c = m.charAt(i);
+        var f = -1;
+        if (c.charCodeAt() >= 65 && c.charCodeAt() <= 90) {
+            f = voteArray.indexOf(c);
+        } else if (c.charCodeAt() >= 97 && c.charCodeAt() <= 122) {
+            f = voteArray.indexOf(String.fromCharCode(c.charCodeAt() - 32));
+        }
         if (f != -1) {
             senderMap.set(s, true);
             voteCount[f]++;
