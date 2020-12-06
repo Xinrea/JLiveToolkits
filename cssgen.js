@@ -304,14 +304,14 @@ var update = function (event) {
             updateStyle(panel, styles[panel]);
         }, false);
     }
-    if ($(event.srcElement).hasClass('room') || $(event.srcElement).hasClass('time') || $(event.srcElement).hasClass('opt') || $(event.srcElement).hasClass('template') || $(event.srcElement).hasClass('template-guard') || $(event.srcElement).hasClass('template-sc') || $(event.srcElement).hasClass('silver')) {
+    if ($(event.srcElement).hasClass('room') || $(event.srcElement).hasClass('time') || $(event.srcElement).hasClass('opt') || $(event.srcElement).hasClass('template') || $(event.srcElement).hasClass('template-guard') || $(event.srcElement).hasClass('template-sc') || $(event.srcElement).hasClass('silver') || $(event.srcElement).hasClass('minimal')) {
         $('.room').val(getValue(panel, 'room'));
         var iframe = $('#heat').find('iframe');
         var iframe2 = $('#vote').find('iframe');
         var iframe3 = $('#gift').find('iframe');
         iframe.attr('src', 'heat/index.html?mid=' + getValue(panel, 'room'));
         iframe2.attr('src', 'vote/index.html?mid=' + getValue(panel, 'room') + '&option=' + getValue('vote', 'opt') + '&time=' + getValue('vote', 'time') + '&test');
-        iframe3.attr('src', 'gift/index.html?mid=' + getValue(panel, 'room') + '&time=' + getValue('gift', 'time') + '&template=' + getValue('gift', 'template') + '&template-guard=' + getValue('gift', 'template-guard') + '&template-sc=' + getValue('gift', 'template-sc') + '&silver=' + isChecked('gift', 'silver') + '&test');
+        iframe3.attr('src', 'gift/index.html?mid=' + getValue(panel, 'room') + '&time=' + getValue('gift', 'time') + '&template=' + getValue('gift', 'template') + '&template-guard=' + getValue('gift', 'template-guard') + '&template-sc=' + getValue('gift', 'template-sc') + '&silver=' + isChecked('gift', 'silver') + '&minimal=' + getValue('gift', 'minimal') + '&test');
         iframe.get(0).addEventListener("load", function () {
             this.removeEventListener("load", arguments.call, false);
             updateStyle('heat', styles['heat']);
@@ -363,7 +363,7 @@ var copy = function (e) {
 var inputs = document.querySelectorAll('input');
 inputs.forEach(function (input) {
     input.addEventListener('change', update);
-    if ($(input).hasClass('room') || $(input).hasClass('time') || $(input).hasClass('opt') || $(input).hasClass('template') || $(input).hasClass('template-guard') || $(input).hasClass('template-sc')) {
+    if ($(input).hasClass('room') || $(input).hasClass('time') || $(input).hasClass('opt') || $(input).hasClass('template') || $(input).hasClass('template-guard') || $(input).hasClass('template-sc') || $(input).hasClass('minimal')) {
 
     }
     else input.addEventListener('input', update);
