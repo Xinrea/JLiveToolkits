@@ -147,7 +147,7 @@ const decode = function (blob) {
     });
 }
 
-const ws = new WebSocket('wss://broadcastlv.chat.bilibili.com:2245/sub');
+const ws = new ReconnectingWebSocket('wss://broadcastlv.chat.bilibili.com:2245/sub');
 ws.onopen = function () {
     $('#status').text('')
     ws.send(encode(JSON.stringify({

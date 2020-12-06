@@ -28,6 +28,8 @@ var template = {
     'superchat': '{{usr}}的{{num}}元SC：{{superchat}}'
 };
 var test = urlParams.hasOwnProperty('test');
+let silverGiftName = ["小心心", "辣条"];
+var minimal = 0;
 
 
 if (urlParams.hasOwnProperty("template")) template['gift'] = urlParams["template"];
@@ -35,6 +37,47 @@ if (urlParams.hasOwnProperty("template-guard")) template['guard'] = urlParams["t
 if (urlParams.hasOwnProperty("template-sc")) template['superchat'] = urlParams["template-sc"];
 if (urlParams.hasOwnProperty("time")) anitime = urlParams["time"] * 1000;
 if (urlParams.hasOwnProperty("silver")) silver = urlParams["silver"] === 'true';
+if (urlParams.hasOwnProperty("minimal")) minimal = Number(urlParams["minimal"]);
+
+var giftList = new Map();
+
+function insertGift(g) {
+    if (g.id == "") tryShowGift(g);
+    else {
+        if (giftList.has(g.id)) {
+            console.log("[CombineGift]");
+            var tmp = giftList.get(g.id);
+            clearTimeout(tmp.timeout);
+            tmp.data.coin += g.coin;
+            tmp.data.num += g.num;
+            giftList.set(g.id, {
+                'timeout': setTimeout(() => {
+                    tryShowGift(giftList.get(g.id).data);
+                    giftList.delete(g.id);
+                    console.log("[ComboEnd]");
+                }, 5000),
+                'data': tmp.data
+            });
+        } else {
+            giftList.set(g.id, {
+                'timeout': setTimeout(() => {
+                    tryShowGift(giftList.get(g.id).data);
+                    giftList.delete(g.id);
+                    console.log("[ComboEnd]");
+                }, 5000),
+                'data': g
+            })
+        }
+    }
+}
+
+function tryShowGift(d) {
+    if (!silverGiftName.includes(d.gift)) {
+        if (d.coin < minimal) return;
+    }
+    giftQueue.push(d);
+    if (audio[0].paused && !inAnimation) showGift();
+}
 
 var callbacks = {
     'usr': function (d) {
@@ -293,7 +336,7 @@ const decode = function (blob) {
     });
 }
 
-const ws = new WebSocket('wss://broadcastlv.chat.bilibili.com:2245/sub');
+const ws = new ReconnectingWebSocket('wss://broadcastlv.chat.bilibili.com:2245/sub');
 ws.onopen = function () {
     $('#status').text('')
     ws.send(encode(JSON.stringify({
@@ -357,40 +400,21 @@ function NewGift(type, raw) {
     var d = null;
     switch (type) {
         case 'gift': {
-            // 小心心会在之后以combo_send的形式出现
-            if (raw.data.giftName === '小心心') break;
-            // 其它银瓜子礼物
-            if (raw.data.coin_type != 'gold' && silver) {
-                d = {
-                    'type': 'gift',
-                    'action': raw.data.action,
-                    'user': raw.data.uname,
-                    'num': raw.data.num,
-                    'gift': raw.data.giftName
-                }
-                break;
-            }
-            if (raw.data.coin_type != 'gold' && !silver) break;
-            // 其它金瓜子礼物
+            console.log(raw.data);
+            if (!silver && silverGiftName.includes(raw.data.giftName)) break;
             d = {
+                'id': raw.data.batch_combo_id,
                 'type': 'gift',
                 'action': raw.data.action,
                 'user': raw.data.uname,
                 'num': raw.data.num,
-                'gift': raw.data.giftName
+                'gift': raw.data.giftName,
+                'coin': raw.data.total_coin
             }
+            insertGift(d);
             break;
         }
         case 'combo': {
-            // 好像只有小心心会这样显示
-            if (!silver) break;
-            d = {
-                'type': 'gift',
-                'action': raw.data.action,
-                'user': raw.data.uname,
-                'num': raw.data.batch_combo_num,
-                'gift': raw.data.gift_name
-            }
             break;
         }
         case 'guard':
@@ -399,6 +423,8 @@ function NewGift(type, raw) {
                 'user': raw.data.username,
                 'guard': raw.data.guard_level
             }
+            giftQueue.push(d);
+            if (audio[0].paused && !inAnimation) showGift();
             break;
         case 'superchat':
             d = {
@@ -407,13 +433,11 @@ function NewGift(type, raw) {
                 'superchat': raw.data.message,
                 'num': raw.data.price
             }
+            giftQueue.push(d);
+            if (audio[0].paused && !inAnimation) showGift();
             break;
         default:
             break;
-    }
-    if (d) {
-        giftQueue.push(d);
-        if (audio[0].paused && !inAnimation) showGift();
     }
 }
 
