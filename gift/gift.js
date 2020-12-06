@@ -38,6 +38,7 @@ if (urlParams.hasOwnProperty("template-sc")) template['superchat'] = urlParams["
 if (urlParams.hasOwnProperty("time")) anitime = urlParams["time"] * 1000;
 if (urlParams.hasOwnProperty("silver")) silver = urlParams["silver"] === 'true';
 if (urlParams.hasOwnProperty("minimal")) minimal = Number(urlParams["minimal"]);
+if (silver) minimal = 0;
 
 var giftList = new Map();
 
