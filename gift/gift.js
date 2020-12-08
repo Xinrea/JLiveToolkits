@@ -28,7 +28,6 @@ var template = {
     'superchat': '{{usr}}的{{num}}元SC：{{superchat}}'
 };
 var test = urlParams.hasOwnProperty('test');
-let silverGiftName = ["小心心", "辣条"];
 var minimal = 0;
 
 
@@ -73,7 +72,7 @@ function insertGift(g) {
 }
 
 function tryShowGift(d) {
-    if (!silverGiftName.includes(d.gift)) {
+    if (d.ctype != "silver") {
         if (d.coin < minimal) return;
     }
     giftQueue.push(d);
@@ -402,7 +401,7 @@ function NewGift(type, raw) {
     switch (type) {
         case 'gift': {
             console.log(raw.data);
-            if (!silver && silverGiftName.includes(raw.data.giftName)) break;
+            if (!silver && (raw.data.coin_type == "silver")) break;
             d = {
                 'id': raw.data.batch_combo_id,
                 'type': 'gift',
@@ -410,7 +409,8 @@ function NewGift(type, raw) {
                 'user': raw.data.uname,
                 'num': raw.data.num,
                 'gift': raw.data.giftName,
-                'coin': raw.data.total_coin
+                'coin': raw.data.total_coin,
+                'ctype': raw.data.coin_type
             }
             insertGift(d);
             break;
