@@ -384,6 +384,10 @@ ws.onmessage = async function (msgEvent) {
                         if (!(imgSet && audioSet)) break;
                         NewGift('superchat', body);
                         break;
+                    case 'SUPER_CHAT_MESSAGE':
+                        if (!(imgSet && audioSet)) break;
+                        NewGift('superchat', body);
+                        break;
                     case 'WELCOME':
                         break;
                     // 此处省略很多其他通知类型
