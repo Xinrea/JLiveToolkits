@@ -461,7 +461,7 @@ function showGift() {
     $('#output')[0].style.transform = 'scale(1,1) translate(-50%, -50%)';
     sleep(anitime).then(() => {
         $('#output')[0].style.opacity = 0;
-        $('#output')[0].style.transform = 'scale(0.8,0.9) translate(-50%, -50%)';
+        $('#output')[0].style.transform = 'scale(0.9,0.9) translate(-50%, -50%)';
         sleep(1700).then(() => {
             inAnimation = false;
             if (giftQueue.size() > 0) showGift();
