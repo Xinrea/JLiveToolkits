@@ -367,22 +367,14 @@ ws.onmessage = async function (msgEvent) {
                         NewGift('gift', body);
                         break;
                     case 'COMBO_SEND':
-                        if (!(imgSet && audioSet)) break;
-                        NewGift('combo', body);
                         break;
                     case 'GUARD_BUY':
                         if (!(imgSet && audioSet)) break;
                         NewGift('guard', body);
-                        //if (audio[0].paused && !inAnimation) showGift();
                         break;
                     case 'USER_TOAST_MSG':
-                        if (!(imgSet && audioSet)) break;
-                        NewGift('guard', body);
-                        //if (audio[0].paused && !inAnimation) showGift();
                         break;
                     case 'SUPER_CHAT_MESSAGE_JPN':
-                        if (!(imgSet && audioSet)) break;
-                        NewGift('superchat', body);
                         break;
                     case 'SUPER_CHAT_MESSAGE':
                         if (!(imgSet && audioSet)) break;
@@ -401,10 +393,10 @@ ws.onmessage = async function (msgEvent) {
 };
 
 function NewGift(type, raw) {
+    console.log(raw.data)
     var d = null;
     switch (type) {
         case 'gift': {
-            console.log(raw.data);
             if (!silver && (raw.data.coin_type == "silver")) break;
             d = {
                 'id': raw.data.batch_combo_id,
