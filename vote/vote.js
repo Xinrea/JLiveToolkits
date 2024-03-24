@@ -151,7 +151,11 @@ const ws = new ReconnectingWebSocket('wss://broadcastlv.chat.bilibili.com:2245/s
 ws.onopen = function () {
     $('#status').text('')
     ws.send(encode(JSON.stringify({
-        roomid: Number(mid)
+        roomid: Number(mid),
+		protover: 3,
+		type: 2,
+		platform: 'web',
+		key: 'test',
     }), 7));
 };
 
@@ -180,6 +184,7 @@ ws.onmessage = async function (msgEvent) {
             break;
         case 5:
             packet.body.forEach((body) => {
+				console.log(body.cmd)
                 switch (body.cmd) {
                     case 'DANMU_MSG':
                         if (body.info[0][9] > 0) break;
